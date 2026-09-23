@@ -32,7 +32,7 @@ jobs:
           fetch-depth: 0 # Nx needs full history to calculate affected projects
 
       - name: Setup Node.js Runtime
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v7
         with:
           node-version: "22"
           cache: "npm"
@@ -92,7 +92,7 @@ jobs:
     needs: verify
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v7
         with:
           node-version: "22"
           cache: "npm"
