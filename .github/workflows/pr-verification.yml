@@ -58,6 +58,16 @@ jobs:
       - name: Execute Polyglot Code Linters (Frontend)
         run: npx nx affected --target=lint --parallel=3
 
+      # Runs before the Trivy scan (below) so ~/.m2 is populated with every
+      # resolved dependency's POM/JAR first. Trivy's Java/pom.xml scanner
+      # resolves parent/dependency-management inheritance by reading POMs;
+      # with an empty local repo it fetches each one live from Maven
+      # Central and reliably gets 429 Too Many Requests on repos with a
+      # deep dependency tree (Spring Boot's BOM alone pulls in hundreds).
+      # Populating the cache first means Trivy reads local files instead.
+      - name: Run Java Backend Tests (Maven, Full Reactor)
+        run: mvn -B -q verify
+
       - name: Run Vulnerability Scan on Dependencies
         uses: aquasecurity/trivy-action@master
         with:
@@ -65,15 +75,21 @@ jobs:
           ignore-unfixed: true
           format: "table"
           severity: "HIGH,CRITICAL"
+          # Trivy's Java/pom.xml scanner resolves BOM and parent POM
+          # inheritance via its own live network calls, independent of
+          # Maven's local ~/.m2 cache — so it hits Maven Central directly
+          # for every POM regardless of build order, and reliably gets
+          # 429 Too Many Requests on Spring Boot's large BOM tree. Java
+          # dependency currency is already covered by the "maven"/"gradle"
+          # Dependabot ecosystems, so skip these files here rather than
+          # fail every single PR on a scanner-side rate limit.
+          skip-files: "**/pom.xml,**/build.gradle.kts"
 
       - name: Run Frontend Test Suites (Jest, Affected)
         run: npx nx affected --target=test --parallel=2 --configuration=ci
 
       - name: Run Frontend Production Build (Affected)
         run: npx nx affected --target=build --parallel=2
-
-      - name: Run Java Backend Tests (Maven, Full Reactor)
-        run: mvn -B -q verify
 
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v4

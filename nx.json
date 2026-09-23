@@ -18,6 +18,7 @@
     "sharedGlobals": []
   },
   "release": {
+    "projects": ["*"],
     "version": {
       "generatorOptions": {
         "currentVersionResolver": "git-tag",

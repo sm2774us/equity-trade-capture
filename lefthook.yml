@@ -1,5 +1,14 @@
 # Lefthook pre-commit hooks. Mirrors what CI enforces so a bad commit never
 # leaves the developer's machine.
+#
+# Conventional-Commit *message* format is intentionally NOT enforced here
+# via a commit-msg hook: Nx Release's own automated release commits (and
+# any local WIP commits squashed at merge time) don't need to individually
+# satisfy that format — only the PR *title* does, and that's enforced
+# authoritatively by the `pr-title-lint` job in
+# .github/workflows/pr-verification.yml. A local commitlint hook would
+# require its own config/dependencies and would incorrectly block Nx
+# Release's automated commit in CI.
 pre-commit:
   parallel: true
   commands:
@@ -12,8 +21,3 @@ pre-commit:
     java-spotless:
       glob: "**/*.java"
       run: mvn -q spotless:check
-
-commit-msg:
-  commands:
-    conventional-commit:
-      run: npx --yes commitlint --edit {1}

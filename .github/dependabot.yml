@@ -7,6 +7,17 @@ updates:
     commit-message:
       prefix: "chore"
       include: "scope"
+    # Major-version bumps of framework-defining packages (Angular, Nx,
+    # TypeScript, Tailwind, the various ESLint plugins) require coordinated
+    # manual migration — new peer-dependency ranges, breaking API changes —
+    # that Dependabot cannot safely automate even with grouping. Every
+    # ERESOLVE failure seen in CI so far was exactly this: a major bump
+    # landing on one package while a peer elsewhere stayed pinned. Minor/
+    # patch bumps stay fully automated; majors still show up in the
+    # Dependabot UI for manual review, just not as an auto-opened PR.
+    ignore:
+      - dependency-name: "*"
+        update-types: ["version-update:semver-major"]
     groups:
       # Nx requires every @nx/* package (and the nx CLI itself) to stay on
       # the exact same version — a single-package bump (e.g. @nx/playwright
