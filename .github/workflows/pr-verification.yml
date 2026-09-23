@@ -23,7 +23,7 @@ jobs:
     # existed, or for the rare case its prefix doesn't apply cleanly.
     if: github.actor != 'dependabot[bot]'
     steps:
-      - uses: amannn/action-semantic-pull-request@v5
+      - uses: amannn/action-semantic-pull-request@v6
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
