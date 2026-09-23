@@ -163,7 +163,7 @@ You need, on **both** Windows 11 and Ubuntu:
 | JDK | 17 (Temurin recommended) | Both Java services |
 | Maven | 3.9+ | Backend build (path A) |
 | Gradle | 8.10+ | Backend build (path B) |
-| Node.js | 20 LTS | Nx, Angular, tooling |
+| Node.js | 22 LTS | Nx, Angular, tooling |
 | npm | 10+ (bundled with Node 20) | JS package management |
 | Docker Desktop (Win11) / Docker Engine + Compose (Ubuntu) | latest | Kafka, Postgres, containerized run |
 | Git | latest | Version control |
@@ -183,11 +183,11 @@ curl -s "https://get.sdkman.io" | bash
 source "$HOME/.sdkman/bin/sdkman-init.sh"
 sdk install gradle 8.10
 
-# Node.js 20 (via nvm, recommended)
+# Node.js 22 (via nvm, recommended)
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.1/install.sh | bash
 source ~/.bashrc
-nvm install 20
-nvm use 20
+nvm install 22
+nvm use 22
 
 # Docker + Compose plugin
 sudo apt install -y docker.io docker-compose-plugin

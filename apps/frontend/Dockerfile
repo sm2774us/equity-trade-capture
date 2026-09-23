@@ -1,7 +1,6 @@
-FROM node:20-alpine AS build
+FROM node:22-alpine AS build
 WORKDIR /workspace
-COPY package.json package-lock.json* ./
-COPY apps/frontend/package.json apps/frontend/package.json
+COPY package.json package-lock.json ./
 RUN npm ci
 COPY . .
 RUN npx nx build frontend --configuration=production
