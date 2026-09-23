@@ -68,7 +68,7 @@ class TradeCaptureIntegrationTest {
 
     @BeforeEach
     void setUpConsumer() {
-        var props = KafkaTestUtils.consumerProps("test-group-" + System.nanoTime(), "true", null);
+        var props = KafkaTestUtils.consumerProps("test-group-" + System.nanoTime(), "true", (String) null);
         props.put(org.apache.kafka.clients.consumer.ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, kafka.getBootstrapServers());
         props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
         props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, JsonDeserializer.class);

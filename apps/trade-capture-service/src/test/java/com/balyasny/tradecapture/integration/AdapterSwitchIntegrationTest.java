@@ -60,11 +60,13 @@ class AdapterSwitchIntegrationTest {
 
     @Test
     void capturesTradeViaDedicatedMurexEndpoint() {
-        Map<String, Object> murexPayload = Map.of(
-                "dealId", "DEAL-100", "mxPortfolio", "SYSMACRO-EQ-01", "counterparty", "CPTY-GS",
-                "trader", "TRADER-1", "instrumentCode", "AAPL", "mxProductType", "EQUITY_SPOT",
-                "buySell", "B", "nominalQuantity", 100, "dealPrice", 189.32, "dealCurrency", "USD",
-                "tradeDateTime", Instant.now().toString(), "executionVenue", "NASDAQ"
+        Map<String, Object> murexPayload = Map.ofEntries(
+                Map.entry("dealId", "DEAL-100"), Map.entry("mxPortfolio", "SYSMACRO-EQ-01"),
+                Map.entry("counterparty", "CPTY-GS"), Map.entry("trader", "TRADER-1"),
+                Map.entry("instrumentCode", "AAPL"), Map.entry("mxProductType", "EQUITY_SPOT"),
+                Map.entry("buySell", "B"), Map.entry("nominalQuantity", 100),
+                Map.entry("dealPrice", 189.32), Map.entry("dealCurrency", "USD"),
+                Map.entry("tradeDateTime", Instant.now().toString()), Map.entry("executionVenue", "NASDAQ")
         );
 
         ResponseEntity<Map> response = restTemplate.postForEntity(
@@ -76,11 +78,13 @@ class AdapterSwitchIntegrationTest {
 
     @Test
     void capturesTradeViaDedicatedIonEndpoint() {
-        Map<String, Object> ionPayload = Map.of(
-                "clOrdId", "CLORD-100", "execId", "EXEC-100", "account", "SYSMACRO-EQ-01",
-                "trader", "TRADER-1", "symbol", "MSFT", "securityType", "CS", "side", "1",
-                "lastQty", 50, "lastPx", 410.10, "currency", "USD",
-                "transactTime", Instant.now().toString(), "lastMkt", "XNAS"
+        Map<String, Object> ionPayload = Map.ofEntries(
+                Map.entry("clOrdId", "CLORD-100"), Map.entry("execId", "EXEC-100"),
+                Map.entry("account", "SYSMACRO-EQ-01"), Map.entry("trader", "TRADER-1"),
+                Map.entry("symbol", "MSFT"), Map.entry("securityType", "CS"),
+                Map.entry("side", "1"), Map.entry("lastQty", 50),
+                Map.entry("lastPx", 410.10), Map.entry("currency", "USD"),
+                Map.entry("transactTime", Instant.now().toString()), Map.entry("lastMkt", "XNAS")
         );
 
         ResponseEntity<Map> response = restTemplate.postForEntity(
@@ -98,11 +102,13 @@ class AdapterSwitchIntegrationTest {
         ResponseEntity<Map> activeResponse = restTemplate.getForEntity(url("/api/v1/adapters/active"), Map.class);
         assertThat(activeResponse.getBody().get("active")).isEqualTo("MUREX");
 
-        Map<String, Object> murexPayload = Map.of(
-                "dealId", "DEAL-101", "mxPortfolio", "SYSMACRO-EQ-01", "counterparty", "CPTY-GS",
-                "trader", "TRADER-1", "instrumentCode", "AAPL", "mxProductType", "EQUITY_SPOT",
-                "buySell", "S", "nominalQuantity", 25, "dealPrice", 190.00, "dealCurrency", "USD",
-                "tradeDateTime", Instant.now().toString(), "executionVenue", "NASDAQ"
+        Map<String, Object> murexPayload = Map.ofEntries(
+                Map.entry("dealId", "DEAL-101"), Map.entry("mxPortfolio", "SYSMACRO-EQ-01"),
+                Map.entry("counterparty", "CPTY-GS"), Map.entry("trader", "TRADER-1"),
+                Map.entry("instrumentCode", "AAPL"), Map.entry("mxProductType", "EQUITY_SPOT"),
+                Map.entry("buySell", "S"), Map.entry("nominalQuantity", 25),
+                Map.entry("dealPrice", 190.00), Map.entry("dealCurrency", "USD"),
+                Map.entry("tradeDateTime", Instant.now().toString()), Map.entry("executionVenue", "NASDAQ")
         );
 
         ResponseEntity<Map> response = restTemplate.postForEntity(
