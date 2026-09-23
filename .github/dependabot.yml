@@ -4,27 +4,71 @@ updates:
     directory: "/"
     schedule: { interval: "weekly" }
     open-pull-requests-limit: 10
+    commit-message:
+      prefix: "chore"
+      include: "scope"
+    groups:
+      # Nx requires every @nx/* package (and the nx CLI itself) to stay on
+      # the exact same version — a single-package bump (e.g. @nx/playwright
+      # alone) breaks the workspace. Grouping forces them to move together
+      # in one PR, or not at all.
+      nx:
+        patterns:
+          - "nx"
+          - "@nx/*"
+      # Same constraint for Angular: @angular/core, @angular/cli,
+      # @angular/compiler-cli etc. must share a major/minor version.
+      angular:
+        patterns:
+          - "@angular/*"
+          - "@angular-devkit/*"
+          - "@angular-eslint/*"
 
   - package-ecosystem: "maven"
     directory: "/"
     schedule: { interval: "weekly" }
+    commit-message:
+      prefix: "chore"
+    groups:
+      # spring-boot-starter-parent pins the whole Spring Boot BOM; letting
+      # one spring-boot-* artifact drift from the parent version breaks
+      # dependency resolution.
+      spring-boot:
+        patterns:
+          - "org.springframework.boot:*"
+          - "org.springframework.kafka:*"
 
   - package-ecosystem: "gradle"
     directory: "/"
     schedule: { interval: "weekly" }
+    commit-message:
+      prefix: "chore"
+    groups:
+      spring-boot:
+        patterns:
+          - "org.springframework.boot:*"
+          - "org.springframework.kafka:*"
 
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule: { interval: "weekly" }
+    commit-message:
+      prefix: "ci"
 
   - package-ecosystem: "docker"
     directory: "/apps/trade-capture-service"
     schedule: { interval: "weekly" }
+    commit-message:
+      prefix: "chore"
 
   - package-ecosystem: "docker"
     directory: "/apps/pnl-risk-consumer"
     schedule: { interval: "weekly" }
+    commit-message:
+      prefix: "chore"
 
   - package-ecosystem: "docker"
     directory: "/apps/frontend"
     schedule: { interval: "weekly" }
+    commit-message:
+      prefix: "chore"

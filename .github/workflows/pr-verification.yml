@@ -17,6 +17,11 @@ jobs:
   pr-title-lint:
     name: Enforce Conventional Commit PR Title
     runs-on: ubuntu-latest
+    # Dependabot's own commit-message.prefix (.github/dependabot.yml) already
+    # gives its PR titles a Conventional Commits prefix going forward; this
+    # skip is a safety net for any PR Dependabot opened before that config
+    # existed, or for the rare case its prefix doesn't apply cleanly.
+    if: github.actor != 'dependabot[bot]'
     steps:
       - uses: amannn/action-semantic-pull-request@v5
         env:
@@ -54,7 +59,7 @@ jobs:
         run: npx nx affected --target=lint --parallel=3
 
       - name: Run Vulnerability Scan on Dependencies
-        uses: aquasecurity/trivy-action@0.28.0
+        uses: aquasecurity/trivy-action@master
         with:
           scan-type: "fs"
           ignore-unfixed: true

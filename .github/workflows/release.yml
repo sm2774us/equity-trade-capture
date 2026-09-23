@@ -42,10 +42,23 @@ jobs:
         run: npm ci
 
       # Nx Release calculates version bumps from Conventional Commits,
-      # edits/creates CHANGELOG.md, commits it, and tags it.
+      # edits/creates CHANGELOG.md, commits it, and tags it. The
+      # `git-tag` current-version resolver (nx.json) needs --first-release
+      # on the very first run, since there's no prior tag to diff from —
+      # detect that automatically so this workflow doesn't need manual
+      # editing after the repo's first release.
+      - name: Determine First-Release Flag
+        id: first-release-check
+        run: |
+          if git tag --list | grep -q .; then
+            echo "flag=" >> "$GITHUB_OUTPUT"
+          else
+            echo "flag=--first-release" >> "$GITHUB_OUTPUT"
+          fi
+
       - name: Run Nx Release (Generate Version, Changelog & Git Tag)
         id: nx-release
-        run: npx nx release --skip-publish --dry-run=false --yes
+        run: npx nx release --skip-publish --dry-run=false ${{ steps.first-release-check.outputs.flag }}
 
       - name: Push Changelog Updates and Tags
         run: git push origin main --follow-tags
