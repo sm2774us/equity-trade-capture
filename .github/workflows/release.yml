@@ -76,7 +76,7 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build & Push trade-capture-service Image
-        uses: docker/build-push-action@v6
+        uses: docker/build-push-action@v7
         with:
           context: .
           file: apps/trade-capture-service/Dockerfile
@@ -84,7 +84,7 @@ jobs:
           tags: ghcr.io/${{ steps.repo-name.outputs.lower }}/trade-capture-service:${{ steps.nx-release.outputs.version || github.sha }}
 
       - name: Build & Push pnl-risk-consumer Image
-        uses: docker/build-push-action@v6
+        uses: docker/build-push-action@v7
         with:
           context: .
           file: apps/pnl-risk-consumer/Dockerfile
@@ -92,7 +92,7 @@ jobs:
           tags: ghcr.io/${{ steps.repo-name.outputs.lower }}/pnl-risk-consumer:${{ steps.nx-release.outputs.version || github.sha }}
 
       - name: Build & Push frontend Image
-        uses: docker/build-push-action@v6
+        uses: docker/build-push-action@v7
         with:
           context: .
           file: apps/frontend/Dockerfile
