@@ -1,6 +1,6 @@
 # Multi-stage build: compile with Maven (cached layer via dependency
 # pre-fetch), then run on a minimal JRE for a small, fast-starting image.
-FROM eclipse-temurin:17-jdk-jammy AS build
+FROM eclipse-temurin:25-jdk-jammy AS build
 WORKDIR /workspace
 COPY pom.xml ./root-pom.xml
 COPY libs/common-events/pom.xml libs/common-events/pom.xml
@@ -12,7 +12,7 @@ RUN --mount=type=cache,target=/root/.m2 \
     mvn -f root-pom.xml -pl libs/common-events,apps/trade-capture-service -am \
     package -DskipTests -q
 
-FROM eclipse-temurin:17-jre-jammy
+FROM eclipse-temurin:25-jre-jammy
 RUN useradd --system --create-home appuser
 USER appuser
 WORKDIR /app
