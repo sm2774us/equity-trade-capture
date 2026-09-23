@@ -6,7 +6,7 @@ RUN npm ci
 COPY . .
 RUN npx nx build frontend --configuration=production
 
-FROM nginx:1.27-alpine
+FROM nginx:1.29-alpine
 COPY --from=build /workspace/dist/apps/frontend /usr/share/nginx/html
 COPY apps/frontend/nginx.conf /etc/nginx/conf.d/default.conf
 EXPOSE 80
