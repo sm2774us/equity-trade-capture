@@ -34,7 +34,7 @@
   "devDependencies": {
     "nx": "19.8.4",
     "@nx/angular": "19.8.4",
-    "@nx/eslint": "19.8.4",
+    "@nx/eslint": "23.2.1",
     "@nx/jest": "19.8.4",
     "@nx/playwright": "19.8.4",
     "@nx/workspace": "19.8.4",
