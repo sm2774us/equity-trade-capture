@@ -32,7 +32,7 @@
     "zone.js": "0.14.10"
   },
   "devDependencies": {
-    "nx": "19.8.4",
+    "nx": "23.2.1",
     "@nx/angular": "19.8.4",
     "@nx/eslint": "19.8.4",
     "@nx/jest": "19.8.4",
