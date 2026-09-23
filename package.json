@@ -51,7 +51,7 @@
     "jest": "29.7.0",
     "jest-environment-jsdom": "29.7.0",
     "jest-preset-angular": "14.2.4",
-    "tailwindcss": "3.4.13",
+    "tailwindcss": "4.3.3",
     "lefthook": "1.7.18",
     "prettier": "3.3.3",
     "typescript": "5.5.4"
