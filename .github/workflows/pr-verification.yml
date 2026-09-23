@@ -54,7 +54,7 @@ jobs:
         run: npx nx affected --target=lint --parallel=3
 
       - name: Run Vulnerability Scan on Dependencies
-        uses: aquasecurity/trivy-action@0.28.0
+        uses: aquasecurity/trivy-action@v0.36.0
         with:
           scan-type: "fs"
           ignore-unfixed: true
