@@ -1,0 +1,19 @@
+# Lefthook pre-commit hooks. Mirrors what CI enforces so a bad commit never
+# leaves the developer's machine.
+pre-commit:
+  parallel: true
+  commands:
+    frontend-lint:
+      glob: "apps/frontend/**/*.{ts,tsx,html,scss}"
+      run: npx nx lint frontend --files={staged_files}
+    frontend-format:
+      glob: "apps/frontend/**/*.{ts,tsx,html,scss,json}"
+      run: npx prettier --check {staged_files}
+    java-spotless:
+      glob: "**/*.java"
+      run: mvn -q spotless:check
+
+commit-msg:
+  commands:
+    conventional-commit:
+      run: npx --yes commitlint --edit {1}

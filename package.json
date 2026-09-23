@@ -1,0 +1,27 @@
+{
+  "name": "trading-platform",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Nx monorepo orchestrating the Java 17 trade-capture/P&L services and the Angular trading front end",
+  "scripts": {
+    "build": "nx run-many --target=build --all",
+    "test": "nx run-many --target=test --all",
+    "lint": "nx run-many --target=lint --all",
+    "e2e": "nx run-many --target=e2e --all",
+    "affected:build": "nx affected --target=build",
+    "affected:test": "nx affected --target=test",
+    "affected:lint": "nx affected --target=lint",
+    "prepare": "lefthook install"
+  },
+  "devDependencies": {
+    "nx": "19.8.4",
+    "@nx/angular": "19.8.4",
+    "@nx/eslint": "19.8.4",
+    "@nx/jest": "19.8.4",
+    "@nx/playwright": "19.8.4",
+    "@nx/workspace": "19.8.4",
+    "lefthook": "1.7.18",
+    "prettier": "3.3.3",
+    "typescript": "5.5.4"
+  }
+}

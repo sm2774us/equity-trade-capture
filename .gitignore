@@ -1,0 +1,16 @@
+node_modules/
+dist/
+coverage/
+target/
+build/
+.gradle/
+.nx/cache/
+.nx/workspace-data/
+*.log
+.DS_Store
+.env
+.idea/
+.vscode/
+*.iml
+playwright-report/
+test-results/

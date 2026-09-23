@@ -1,0 +1,9 @@
+{
+  "_comment": "Merge into your VS Code settings.json (User or Workspace) to point Copilot at the repo instructions file explicitly, in addition to the auto-discovered .github/copilot-instructions.md.",
+  "github.copilot.chat.codeGeneration.instructions": [
+    { "file": ".github/copilot-instructions.md" }
+  ],
+  "github.copilot.chat.testGeneration.instructions": [
+    { "text": "Follow the unit/integration test split described in .github/copilot-instructions.md and CLAUDE.md — unit tests never start a Spring context." }
+  ]
+}

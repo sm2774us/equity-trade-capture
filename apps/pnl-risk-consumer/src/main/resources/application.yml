@@ -1,0 +1,32 @@
+spring:
+  application:
+    name: pnl-risk-consumer
+  kafka:
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
+    consumer:
+      group-id: pnl-risk-consumer
+      auto-offset-reset: earliest
+      enable-auto-commit: false
+      properties:
+        spring.json.trusted.packages: com.balyasny.events
+        spring.json.value.default.type: com.balyasny.events.EnrichedTradeEvent
+    listener:
+      ack-mode: RECORD
+
+trade-capture:
+  topics:
+    enriched: trade-capture.enriched.v1
+    dlq: pnl-risk.enriched.dlq.v1
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, info, prometheus, metrics
+
+server:
+  port: 8081
+
+logging:
+  level:
+    com.balyasny.pnlrisk: INFO

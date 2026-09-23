@@ -1,0 +1,1 @@
+NOTE: run 'gradle wrapper' / 'mvn -N wrapper:wrapper' once locally with network access to materialize gradlew/mvnw binaries + jars (documented in README prerequisites).

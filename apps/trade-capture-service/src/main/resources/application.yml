@@ -1,0 +1,57 @@
+spring:
+  application:
+    name: trade-capture-service
+  datasource:
+    url: jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5432}/${DB_NAME:trade_capture}
+    username: ${DB_USER:trade_capture}
+    password: ${DB_PASSWORD:trade_capture}
+    hikari:
+      maximum-pool-size: 20
+      minimum-idle: 5
+      connection-timeout: 3000
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    open-in-view: false
+  kafka:
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
+    consumer:
+      group-id: trade-capture-service
+      auto-offset-reset: earliest
+      properties:
+        spring.json.trusted.packages: com.balyasny.events
+
+trade-capture:
+  topics:
+    executions: trade-capture.executions.v1
+    enriched: trade-capture.enriched.v1
+    dlq: trade-capture.executions.dlq.v1
+  adapter:
+    # Which upstream source system backs the generic default-ingestion
+    # endpoint (POST /api/v1/adapters/default/trades). One of:
+    # MANUAL_ENTRY (default), MUREX, ION. Murex- and ION-specific
+    # endpoints (/api/v1/adapters/{murex,ion}/trades) always work
+    # regardless of this setting — see AdapterRegistry's javadoc.
+    # Can be switched at runtime via PUT /api/v1/adapters/active/{sourceSystem}.
+    active: ${TRADE_CAPTURE_ACTIVE_ADAPTER:MANUAL_ENTRY}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, info, prometheus, metrics
+  endpoint:
+    health:
+      show-details: always
+  metrics:
+    tags:
+      application: ${spring.application.name}
+
+server:
+  port: 8080
+  shutdown: graceful
+
+logging:
+  level:
+    com.balyasny.tradecapture: INFO
+    org.apache.kafka: WARN

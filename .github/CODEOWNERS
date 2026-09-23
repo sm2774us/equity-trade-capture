@@ -1,0 +1,7 @@
+# Default reviewers for all changes.
+*                                   @shaikat
+
+apps/trade-capture-service/**       @shaikat
+apps/pnl-risk-consumer/**           @shaikat
+apps/frontend/**                    @shaikat
+.github/workflows/**                @shaikat

@@ -1,0 +1,45 @@
+{
+  "name": "frontend",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "application",
+  "sourceRoot": "apps/frontend/src",
+  "tags": ["scope:frontend"],
+  "targets": {
+    "build": {
+      "executor": "@angular-devkit/build-angular:application",
+      "options": {
+        "outputPath": "dist/apps/frontend",
+        "index": "apps/frontend/src/index.html",
+        "browser": "apps/frontend/src/main.ts",
+        "tsConfig": "apps/frontend/tsconfig.app.json",
+        "assets": ["apps/frontend/src/favicon.ico", "apps/frontend/src/assets"],
+        "styles": ["apps/frontend/src/styles.scss"],
+        "optimization": true,
+        "outputHashing": "all"
+      },
+      "configurations": {
+        "production": { "budgets": [{ "type": "initial", "maximumWarning": "500kb", "maximumError": "1mb" }] },
+        "development": { "optimization": false, "sourceMap": true }
+      }
+    },
+    "serve": {
+      "executor": "@angular-devkit/build-angular:dev-server",
+      "options": { "buildTarget": "frontend:build:development" }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint"
+    },
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/apps/frontend"],
+      "options": {
+        "jestConfig": "apps/frontend/jest.config.ts",
+        "codeCoverage": true
+      }
+    },
+    "e2e": {
+      "executor": "@nx/playwright:playwright",
+      "options": { "config": "apps/frontend/playwright.config.ts" }
+    }
+  }
+}

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>com.balyasny</groupId>
+  <artifactId>trading-platform</artifactId>
+  <version>0.1.0</version>
+  <packaging>pom</packaging>
+  <name>trading-platform (root aggregator)</name>
+  <description>
+    Multi-module Maven aggregator for the equities/autocallable trade capture
+    platform. Nx orchestrates cross-module and cross-stack (Java + Angular)
+    builds in CI; this root POM lets any module be built directly with plain
+    Maven for local iteration or IDE import.
+  </description>
+
+  <modules>
+    <module>libs/common-events</module>
+    <module>apps/trade-capture-service</module>
+    <module>apps/pnl-risk-consumer</module>
+  </modules>
+
+  <properties>
+    <maven.compiler.release>17</maven.compiler.release>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+  </properties>
+</project>

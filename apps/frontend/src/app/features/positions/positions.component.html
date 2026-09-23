@@ -1,0 +1,43 @@
+<div class="bg-trading-panel rounded-lg p-4 border border-white/10">
+  <div class="flex items-center justify-between mb-4">
+    <h2 class="text-lg font-semibold">Positions &amp; P&amp;L</h2>
+    <span class="text-sm">
+      Total Realized P&amp;L:
+      <span [class.text-trading-buy]="totalRealizedPnl() >= 0" [class.text-trading-sell]="totalRealizedPnl() < 0">
+        {{ totalRealizedPnl() | number: '1.2-2' }}
+      </span>
+    </span>
+  </div>
+
+  <table mat-table [dataSource]="positions()" class="w-full">
+    <ng-container matColumnDef="bookId">
+      <th mat-header-cell *matHeaderCellDef>Book</th>
+      <td mat-cell *matCellDef="let p">{{ p.bookId }}</td>
+    </ng-container>
+    <ng-container matColumnDef="instrumentId">
+      <th mat-header-cell *matHeaderCellDef>Instrument</th>
+      <td mat-cell *matCellDef="let p">{{ p.instrumentId }}</td>
+    </ng-container>
+    <ng-container matColumnDef="netQuantity">
+      <th mat-header-cell *matHeaderCellDef>Net Qty</th>
+      <td mat-cell *matCellDef="let p">{{ p.netQuantity }}</td>
+    </ng-container>
+    <ng-container matColumnDef="avgCost">
+      <th mat-header-cell *matHeaderCellDef>Avg Cost</th>
+      <td mat-cell *matCellDef="let p">{{ p.avgCost | number: '1.2-4' }}</td>
+    </ng-container>
+    <ng-container matColumnDef="realizedPnl">
+      <th mat-header-cell *matHeaderCellDef>Realized P&amp;L</th>
+      <td mat-cell *matCellDef="let p" [class.text-trading-buy]="p.realizedPnl >= 0" [class.text-trading-sell]="p.realizedPnl < 0">
+        {{ p.realizedPnl | number: '1.2-2' }}
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="lastUpdated">
+      <th mat-header-cell *matHeaderCellDef>Last Updated</th>
+      <td mat-cell *matCellDef="let p">{{ p.lastUpdated | date: 'short' }}</td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+  </table>
+</div>

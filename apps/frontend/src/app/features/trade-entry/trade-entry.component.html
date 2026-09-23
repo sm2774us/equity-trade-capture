@@ -1,0 +1,61 @@
+<form [formGroup]="form" (ngSubmit)="submit()" class="bg-trading-panel rounded-lg p-6 border border-white/10 max-w-2xl grid grid-cols-2 gap-4">
+  <h2 class="col-span-2 text-lg font-semibold mb-2">Manual Trade Entry</h2>
+
+  <mat-form-field appearance="outline">
+    <mat-label>External Order ID</mat-label>
+    <input matInput formControlName="externalOrderId" />
+  </mat-form-field>
+
+  <mat-form-field appearance="outline">
+    <mat-label>Book ID</mat-label>
+    <input matInput formControlName="bookId" />
+  </mat-form-field>
+
+  <mat-form-field appearance="outline">
+    <mat-label>Trader ID</mat-label>
+    <input matInput formControlName="traderId" />
+  </mat-form-field>
+
+  <mat-form-field appearance="outline">
+    <mat-label>Instrument ID</mat-label>
+    <input matInput formControlName="instrumentId" />
+  </mat-form-field>
+
+  <mat-form-field appearance="outline">
+    <mat-label>Instrument Type</mat-label>
+    <mat-select formControlName="instrumentType">
+      @for (t of instrumentTypes; track t) { <mat-option [value]="t">{{ t }}</mat-option> }
+    </mat-select>
+  </mat-form-field>
+
+  <mat-form-field appearance="outline">
+    <mat-label>Side</mat-label>
+    <mat-select formControlName="side">
+      @for (s of sides; track s) { <mat-option [value]="s">{{ s }}</mat-option> }
+    </mat-select>
+  </mat-form-field>
+
+  <mat-form-field appearance="outline">
+    <mat-label>Quantity</mat-label>
+    <input matInput type="number" formControlName="quantity" />
+  </mat-form-field>
+
+  <mat-form-field appearance="outline">
+    <mat-label>Price</mat-label>
+    <input matInput type="number" formControlName="price" />
+  </mat-form-field>
+
+  <mat-form-field appearance="outline">
+    <mat-label>Currency</mat-label>
+    <input matInput formControlName="currency" />
+  </mat-form-field>
+
+  <mat-form-field appearance="outline">
+    <mat-label>Venue</mat-label>
+    <input matInput formControlName="venue" />
+  </mat-form-field>
+
+  <button mat-raised-button color="primary" type="submit" [disabled]="submitting()" class="col-span-2">
+    {{ submitting() ? 'Submitting…' : 'Capture Trade' }}
+  </button>
+</form>

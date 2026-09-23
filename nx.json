@@ -1,0 +1,35 @@
+{
+  "$schema": "./node_modules/nx/schemas/nx-schema.json",
+  "affected": { "defaultBase": "main" },
+  "targetDefaults": {
+    "build": { "dependsOn": ["^build"], "cache": true },
+    "test": { "cache": true },
+    "lint": { "cache": true },
+    "e2e": { "cache": false }
+  },
+  "namedInputs": {
+    "default": ["{projectRoot}/**/*", "sharedGlobals"],
+    "production": [
+      "default",
+      "!{projectRoot}/**/*.spec.ts",
+      "!{projectRoot}/**/*.test.ts",
+      "!{projectRoot}/src/test/**/*"
+    ],
+    "sharedGlobals": []
+  },
+  "release": {
+    "version": {
+      "generatorOptions": {
+        "currentVersionResolver": "git-tag",
+        "specifierSource": "conventional-commits"
+      }
+    },
+    "changelog": {
+      "workspaceChangelog": {
+        "create": true,
+        "entryWhenNoChanges": "No changes recorded.",
+        "file": "{workspaceRoot}/CHANGELOG.md"
+      }
+    }
+  }
+}
