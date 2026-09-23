@@ -491,7 +491,30 @@ fill. Tests: `MurexTradeAdapterTest`, `IonExecutionAdapterTest`,
 `AdapterRegistryTest` (unit), `AdapterSwitchIntegrationTest` (Testcontainers,
 exercises the live switch end-to-end).
 
-## 11. Design notes: production-viability trade-offs made for this showcase
+## 11. Repository housekeeping — keeping Actions runs and branches from piling up
+
+Two separate things pile up over time in an active repo, and they need two separate fixes:
+
+### 11.1 Branches (one-click, do this once)
+
+GitHub does **not** delete a PR's branch automatically by default — merged and closed PRs leave their branch behind forever unless you turn this on:
+
+**Settings → General → Pull Requests → check "Automatically delete head branches"**
+
+This alone handles the overwhelming majority of branch pile-up going forward, including every Dependabot branch whose PR gets merged or closed. It's a repo setting, not something a workflow file can turn on for you.
+
+### 11.2 Workflow run history (no repo setting exists for this — hence the workflow)
+
+GitHub never automatically deletes old Actions run history, successful or not — `.github/workflows/housekeeping.yml` handles this instead. It runs weekly (Sundays 06:00 UTC) and is also available as a manual "Run workflow" button in the Actions tab. For each workflow (`pr-verification.yml`, `release.yml`, `housekeeping.yml` itself) it:
+
+1. Deletes every non-successful run (failed, cancelled, skipped, timed-out) — these have no ongoing value once superseded.
+2. Deletes every successful run **except the single most recent one** — so `main`'s Actions tab always shows exactly one green run per workflow as the current state, not an ever-growing history.
+
+It also deletes any `dependabot/*` branch that has no open PR — a safety net for the rare case a Dependabot branch survives its PR closing even with "Automatically delete head branches" enabled (e.g. a branch Dependabot itself superseded with a newer commit before you closed the old PR).
+
+This workflow needs no additional secrets — `secrets.GITHUB_TOKEN` with the `actions: write` and `contents: write` permissions already declared in the file is sufficient.
+
+## 12. Design notes: production-viability trade-offs made for this showcase
 
 Being transparent about what's simplified vs. what mirrors a real desk
 system, since a senior engineer should be able to name these trade-offs in
