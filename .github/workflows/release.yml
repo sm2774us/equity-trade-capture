@@ -16,18 +16,18 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Source Control
-        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0 # Nx requires full git history to parse commit messages for the changelog
 
       - name: Initialize Node Runtime
-        uses: actions/setup-node@0a44ba7841725637a19e28fa30b79a866c81b0a6 # v4.0.4
+        uses: actions/setup-node@v4
         with:
           node-version: "20"
           cache: "npm"
 
       - name: Setup Java 17 Engine for Secure Build
-        uses: actions/setup-java@8a4421b40c212260662d989f64e2e2832c3f1f7d # v4.3.0
+        uses: actions/setup-java@v4
         with:
           java-version: "17"
           distribution: "temurin"
@@ -57,40 +57,44 @@ jobs:
         run: mvn -B -q -DskipTests package
 
       - name: Generate Build Artifact Attestation (Provenance)
-        uses: actions/attestation-build-provenance@520d128f165991a6c774bcb264f323e3d70747a4 # v1.4.3
+        uses: actions/attest-build-provenance@v1
         with:
           subject-path: |
             apps/trade-capture-service/target/*.jar
             apps/pnl-risk-consumer/target/*.jar
             dist/apps/frontend/**/*
 
+      - name: Compute Lowercase Repository Name (GHCR tags must be lowercase)
+        id: repo-name
+        run: echo "lower=${GITHUB_REPOSITORY,,}" >> "$GITHUB_OUTPUT"
+
       - name: Log in to GitHub Container Registry (GHCR)
-        uses: docker/login-action@9780b0c442fbb1117ed29e0efdff1e18412f7567 # v3.3.0
+        uses: docker/login-action@v3
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build & Push trade-capture-service Image
-        uses: docker/build-push-action@4f58ea79222b3b9dc2c8bbdd6debcef730109a75 # v6.9.0
+        uses: docker/build-push-action@v6
         with:
           context: .
           file: apps/trade-capture-service/Dockerfile
           push: true
-          tags: ghcr.io/${{ github.repository }}/trade-capture-service:${{ steps.nx-release.outputs.version || github.sha }}
+          tags: ghcr.io/${{ steps.repo-name.outputs.lower }}/trade-capture-service:${{ steps.nx-release.outputs.version || github.sha }}
 
       - name: Build & Push pnl-risk-consumer Image
-        uses: docker/build-push-action@4f58ea79222b3b9dc2c8bbdd6debcef730109a75 # v6.9.0
+        uses: docker/build-push-action@v6
         with:
           context: .
           file: apps/pnl-risk-consumer/Dockerfile
           push: true
-          tags: ghcr.io/${{ github.repository }}/pnl-risk-consumer:${{ steps.nx-release.outputs.version || github.sha }}
+          tags: ghcr.io/${{ steps.repo-name.outputs.lower }}/pnl-risk-consumer:${{ steps.nx-release.outputs.version || github.sha }}
 
       - name: Build & Push frontend Image
-        uses: docker/build-push-action@4f58ea79222b3b9dc2c8bbdd6debcef730109a75 # v6.9.0
+        uses: docker/build-push-action@v6
         with:
           context: .
           file: apps/frontend/Dockerfile
           push: true
-          tags: ghcr.io/${{ github.repository }}/frontend:${{ steps.nx-release.outputs.version || github.sha }}
+          tags: ghcr.io/${{ steps.repo-name.outputs.lower }}/frontend:${{ steps.nx-release.outputs.version || github.sha }}
