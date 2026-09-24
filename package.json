@@ -4,10 +4,8 @@
   "private": true,
   "description": "Nx monorepo orchestrating the Java 17 trade-capture/P&L services and the Angular trading front end",
   "engines": {
-    "node": ">=22.0.0 <23.0.0",
-    "npm": ">=10.9.0"
+    "node": ">=22.0.0 <23.0.0"
   },
-  "packageManager": "npm@10.9.7",
   "workspaces": [
     "apps/frontend",
     "apps/trade-capture-service",

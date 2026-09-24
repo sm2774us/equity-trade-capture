@@ -38,17 +38,14 @@ jobs:
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
 
-      - name: Pin Exact npm Version
-        run: npm install -g npm@10.9.7
-
-      - name: Clean Install NPM Dependencies
-        run: npm ci
+      - name: Install NPM Dependencies
+        run: npm install --no-audit --no-fund
 
       # Nx Release's own git commit (chore(release): publish ...) is a
       # bot-generated commit, not a human-authored change — it shouldn't be
-      # gated by the dev-workflow pre-commit/commit-msg hooks that `npm ci`
-      # just installed via lefthook's prepare script. Uninstalling here
-      # (rather than relying on the LEFTHOOK=0 env var, which doesn't
+      # gated by the dev-workflow pre-commit/commit-msg hooks that `npm
+      # install` just installed via lefthook's prepare script. Uninstalling
+      # here (rather than relying on the LEFTHOOK=0 env var, which doesn't
       # reliably propagate through Nx's internal git subprocess) guarantees
       # nothing intercepts that commit.
       - name: Uninstall Lefthook Hooks For This Job

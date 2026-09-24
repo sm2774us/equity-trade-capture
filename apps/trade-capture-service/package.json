@@ -1,6 +1,6 @@
 {
   "name": "trade-capture-service",
-  "version": "0.1.2",
+  "version": "0.1.0",
   "private": true,
   "description": "Nx project stub for the Java trade-capture-service — versioned by Nx Release for the workspace changelog/tag; the actual build/test/package lifecycle is Maven/Gradle, not npm. Never published (nx-release-publish is intentionally unconfigured)."
 }

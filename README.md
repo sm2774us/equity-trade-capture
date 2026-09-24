@@ -227,9 +227,20 @@ docker --version
 
 ```bash
 # From the repository root
-npm ci                 # installs Nx + Angular + all JS devDependencies
-npx lefthook install   # activates pre-commit hooks (lint, spotless, commit-msg)
+npm install             # installs Nx + Angular + all JS devDependencies
+npx lefthook install    # activates pre-commit hooks (lint, spotless)
 ```
+
+> **Why `npm install` and not `npm ci`?** `npm ci` demands the committed
+> `package-lock.json` match a fresh dependency resolution *exactly* — any
+> drift at all (even in an unused transitive package neither this repo nor
+> its dependencies actually need) hard-fails the whole install. `npm
+> install` resolves and installs the same dependencies but reconciles
+> small inconsistencies instead of refusing to proceed. For a project this
+> size, "always installs, self-heals minor drift" beats "occasionally
+> refuses to build over something nobody touched" — every `npm install` in
+> this repo's workflows, Dockerfiles, and local setup instructions is that
+> deliberate choice, not an oversight.
 
 ### 5.1 Materializing the build-tool wrappers
 
@@ -516,7 +527,7 @@ This workflow needs no additional secrets — `secrets.GITHUB_TOKEN` with the `a
 
 This repo does not run Dependabot or any other automated dependency-update bot. On a small, single-maintainer repo, an update bot's PRs still require someone to review, merge, and — as the earlier iterations of this project's CI/CD found the hard way — verify locally before merging, since a bot cannot know that a "minor" bump (e.g. `zone.js`) is actually breaking for this specific dependency graph. That review burden was outweighing the benefit here, so it's gone.
 
-Check for updates on whatever cadence suits you, review changelogs for anything you take, and verify locally (`npm ci`, `nx build`, `nx test`, `mvn verify`) before pushing — exactly the steps that would have caught every dependency-bump failure this repo hit during development:
+Check for updates on whatever cadence suits you, review changelogs for anything you take, and verify locally (`npm install`, `nx build`, `nx test`, `mvn verify`) before pushing — exactly the steps that would have caught every dependency-bump failure this repo hit during development:
 
 ```bash
 # npm (frontend + Nx tooling)

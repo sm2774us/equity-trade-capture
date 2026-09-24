@@ -1,6 +1,6 @@
 {
   "name": "common-events",
-  "version": "0.1.2",
+  "version": "0.1.0",
   "private": true,
   "description": "Nx project stub for the shared Java common-events schema lib — versioned by Nx Release for the workspace changelog/tag; the actual build lifecycle is Maven/Gradle, not npm. Never published (nx-release-publish is intentionally unconfigured)."
 }

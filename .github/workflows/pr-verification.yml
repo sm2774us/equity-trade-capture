@@ -44,11 +44,8 @@ jobs:
           distribution: "temurin"
           cache: "maven"
 
-      - name: Pin Exact npm Version
-        run: npm install -g npm@10.9.7
-
-      - name: Clean Install NPM Dependencies
-        run: npm ci
+      - name: Install NPM Dependencies
+        run: npm install --no-audit --no-fund
 
       - name: Synchronize Nx Affected Base Commit Context
         uses: nrwl/nx-set-shas@v4
@@ -115,7 +112,6 @@ jobs:
         with:
           node-version: "22"
           cache: "npm"
-      - run: npm install -g npm@10.9.7
-      - run: npm ci
+      - run: npm install --no-audit --no-fund
       - run: npx playwright install --with-deps chromium
       - run: npx nx e2e frontend
