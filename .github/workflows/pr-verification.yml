@@ -17,11 +17,6 @@ jobs:
   pr-title-lint:
     name: Enforce Conventional Commit PR Title
     runs-on: ubuntu-latest
-    # Dependabot's own commit-message.prefix (.github/dependabot.yml) already
-    # gives its PR titles a Conventional Commits prefix going forward; this
-    # skip is a safety net for any PR Dependabot opened before that config
-    # existed, or for the rare case its prefix doesn't apply cleanly.
-    if: github.actor != 'dependabot[bot]'
     steps:
       - uses: amannn/action-semantic-pull-request@v5
         env:
@@ -83,8 +78,8 @@ jobs:
           # Maven's local ~/.m2 cache — so it hits Maven Central directly
           # for every POM regardless of build order, and reliably gets
           # 429 Too Many Requests on Spring Boot's large BOM tree. Java
-          # dependency currency is already covered by the "maven"/"gradle"
-          # Dependabot ecosystems, so skip these files here rather than
+          # dependency currency is checked manually (see README §11.3),
+          # so skip these files here rather than
           # fail every single PR on a scanner-side rate limit.
           skip-files: "**/pom.xml,**/build.gradle.kts"
 

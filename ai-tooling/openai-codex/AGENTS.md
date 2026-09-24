@@ -62,4 +62,4 @@ Before proposing a PR is done, Codex should confirm:
 ## Do not touch without explicit instruction
 
 - `.github/workflows/*.yml` (CI/CD contracts — changes here need human review)
-- `pom.xml` / `build.gradle.kts` version numbers (dependency bumps go through Dependabot)
+- `pom.xml` / `build.gradle.kts` version numbers (bump these manually, deliberately, and verify locally — no automated dependency-update bot runs against this repo)

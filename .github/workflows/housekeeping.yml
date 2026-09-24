@@ -1,15 +1,13 @@
-name: Repository Housekeeping (Prune Old Runs & Stale Branches)
+name: Repository Housekeeping (Prune Old Workflow Runs)
 
-# Keeps the Actions tab and branch list from accumulating indefinitely:
-#   1. Workflow run history — GitHub never auto-deletes this. Old
-#      failed/cancelled runs and superseded successful runs pile up
-#      forever otherwise. This job keeps only the single most recent
-#      successful run per workflow and deletes everything else.
-#   2. Stale Dependabot branches — a Dependabot branch whose PR was
-#      closed without merging (e.g. superseded by a newer bump, or
-#      manually closed per the ignore-major-bumps policy) leaves its
-#      branch behind if "Automatically delete head branches" wasn't
-#      enabled, or in the rare case that setting doesn't catch it.
+# GitHub never auto-deletes workflow run history — old failed/cancelled
+# runs and superseded successful runs pile up in the Actions tab forever
+# otherwise. This job keeps only the single most recent successful run
+# per workflow and deletes everything else.
+#
+# Branch cleanup doesn't need a custom job: enabling "Automatically delete
+# head branches" (Settings → General → Pull Requests) handles that for
+# every PR, merged or closed, with no workflow required — see README §11.
 #
 # Runs weekly and can also be triggered manually from the Actions tab.
 on:
@@ -19,7 +17,6 @@ on:
 
 permissions:
   actions: write # delete workflow runs
-  contents: write # delete branches
 
 jobs:
   prune-workflow-runs:
@@ -52,44 +49,3 @@ jobs:
           retain_days: 0
           keep_minimum_runs: 1
           delete_run_by_conclusion_pattern: "success"
-
-  prune-stale-dependabot-branches:
-    name: Delete Dependabot Branches With No Open PR
-    runs-on: ubuntu-latest
-    steps:
-      - name: Delete orphaned dependabot/* branches
-        uses: actions/github-script@v7
-        with:
-          script: |
-            const owner = context.repo.owner;
-            const repo = context.repo.repo;
-
-            // All open PRs, so we can tell which dependabot branches are
-            // still in active use vs. abandoned (closed without merge,
-            // or superseded by a newer Dependabot run on the same branch
-            // prefix).
-            const openPulls = await github.paginate(github.rest.pulls.list, {
-              owner, repo, state: "open", per_page: 100,
-            });
-            const openBranchRefs = new Set(openPulls.map(pr => pr.head.ref));
-
-            const branches = await github.paginate(github.rest.repos.listBranches, {
-              owner, repo, per_page: 100,
-            });
-
-            for (const branch of branches) {
-              const isDependabotBranch = branch.name.startsWith("dependabot/");
-              const hasOpenPr = openBranchRefs.has(branch.name);
-              if (isDependabotBranch && !hasOpenPr) {
-                console.log(`Deleting orphaned branch: ${branch.name}`);
-                try {
-                  await github.rest.git.deleteRef({
-                    owner, repo, ref: `heads/${branch.name}`,
-                  });
-                } catch (err) {
-                  // Already gone, or protected — either way, move on
-                  // rather than failing the whole housekeeping run.
-                  console.log(`Skipping ${branch.name}: ${err.message}`);
-                }
-              }
-            }

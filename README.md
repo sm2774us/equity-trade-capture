@@ -105,7 +105,7 @@ trading-platform/
 ├── ai-tooling/                     # Claude Code / GitHub Copilot / OpenAI Codex configs (also zipped separately)
 ├── .github/
 │   ├── workflows/                  # pr-verification.yml, release.yml (Nx-orchestrated CI/CD)
-│   ├── CODEOWNERS, dependabot.yml, PR/issue templates
+│   ├── CODEOWNERS, PR/issue templates
 ├── docker-compose.yml              # Local Kafka + Postgres + all three services
 ├── nx.json / package.json          # Nx monorepo orchestration
 ├── pom.xml                          # Root Maven reactor (aggregates libs/common-events + both services)
@@ -501,7 +501,7 @@ GitHub does **not** delete a PR's branch automatically by default — merged and
 
 **Settings → General → Pull Requests → check "Automatically delete head branches"**
 
-This alone handles the overwhelming majority of branch pile-up going forward, including every Dependabot branch whose PR gets merged or closed. It's a repo setting, not something a workflow file can turn on for you.
+This is a repo setting, not something a workflow file can turn on for you, and it alone handles branch pile-up for every merged or closed PR going forward.
 
 ### 11.2 Workflow run history (no repo setting exists for this — hence the workflow)
 
@@ -510,9 +510,28 @@ GitHub never automatically deletes old Actions run history, successful or not �
 1. Deletes every non-successful run (failed, cancelled, skipped, timed-out) — these have no ongoing value once superseded.
 2. Deletes every successful run **except the single most recent one** — so `main`'s Actions tab always shows exactly one green run per workflow as the current state, not an ever-growing history.
 
-It also deletes any `dependabot/*` branch that has no open PR — a safety net for the rare case a Dependabot branch survives its PR closing even with "Automatically delete head branches" enabled (e.g. a branch Dependabot itself superseded with a newer commit before you closed the old PR).
+This workflow needs no additional secrets — `secrets.GITHUB_TOKEN` with the `actions: write` permission already declared in the file is sufficient.
 
-This workflow needs no additional secrets — `secrets.GITHUB_TOKEN` with the `actions: write` and `contents: write` permissions already declared in the file is sufficient.
+### 11.3 Dependency updates (manual — no bot running against this repo)
+
+This repo does not run Dependabot or any other automated dependency-update bot. On a small, single-maintainer repo, an update bot's PRs still require someone to review, merge, and — as the earlier iterations of this project's CI/CD found the hard way — verify locally before merging, since a bot cannot know that a "minor" bump (e.g. `zone.js`) is actually breaking for this specific dependency graph. That review burden was outweighing the benefit here, so it's gone.
+
+Check for updates on whatever cadence suits you, review changelogs for anything you take, and verify locally (`npm ci`, `nx build`, `nx test`, `mvn verify`) before pushing — exactly the steps that would have caught every dependency-bump failure this repo hit during development:
+
+```bash
+# npm (frontend + Nx tooling)
+npm outdated
+npm audit                          # flags known CVEs in current deps
+
+# Maven (both Java services)
+mvn versions:display-dependency-updates
+mvn versions:display-plugin-updates
+
+# Gradle
+gradle dependencyUpdates           # requires the com.github.ben-manes.versions plugin (not included by default)
+```
+
+If you later want automation back without Dependabot's per-PR overhead, a scheduled workflow that runs `npm outdated`/`mvn versions:display-dependency-updates` and opens a single summary issue (not a PR per package) is a lighter-weight middle ground — flags what's available without anything auto-merging or needing individual review.
 
 ## 12. Design notes: production-viability trade-offs made for this showcase
 
