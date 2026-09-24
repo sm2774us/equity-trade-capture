@@ -1,16 +1,14 @@
 FROM node:22-alpine AS build
 WORKDIR /workspace
-# npm workspaces (see root package.json's "workspaces" field) means `npm
-# ci` needs every member's package.json present, not just the root one —
-# it validates the whole workspace graph against package-lock.json before
-# installing anything.
-COPY package.json package-lock.json ./
-COPY apps/frontend/package.json apps/frontend/package.json
-COPY apps/trade-capture-service/package.json apps/trade-capture-service/package.json
-COPY apps/pnl-risk-consumer/package.json apps/pnl-risk-consumer/package.json
-COPY libs/common-events/package.json libs/common-events/package.json
-RUN npm ci --ignore-scripts
+# Copy the whole repo before installing: with npm workspaces, `npm ci`
+# needs every workspace member's package.json to validate against
+# package-lock.json, and selectively COPYing just those files has proven
+# fragile (easy to miss one, or for a path to drift as the workspace list
+# changes). Copying everything up front costs some Docker layer-cache
+# efficiency — any source change invalidates this layer too — but that
+# trade is worth it for a build that can't fail this way again.
 COPY . .
+RUN npm ci --ignore-scripts
 RUN npx nx build frontend --configuration=production
 
 FROM nginx:1.27-alpine

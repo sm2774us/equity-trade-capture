@@ -1,0 +1,22 @@
+# Keeps Docker build contexts lean and, more importantly, correct — a
+# stale local node_modules or dist directory leaking into a build context
+# is exactly the kind of thing that causes confusing, hard-to-reproduce
+# npm ci / build failures that only happen in CI.
+node_modules
+**/node_modules
+dist
+**/dist
+coverage
+**/coverage
+.nx
+.angular
+target
+**/target
+build
+**/build
+.git
+.gitignore
+*.log
+.DS_Store
+.idea
+.vscode
