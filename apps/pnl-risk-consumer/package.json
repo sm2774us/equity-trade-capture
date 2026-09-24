@@ -1,6 +1,6 @@
 {
   "name": "pnl-risk-consumer",
-  "version": "0.1.0",
+  "version": "0.1.3",
   "private": true,
   "description": "Nx project stub for the Java pnl-risk-consumer — versioned by Nx Release for the workspace changelog/tag; the actual build/test/package lifecycle is Maven/Gradle, not npm. Never published (nx-release-publish is intentionally unconfigured)."
 }
