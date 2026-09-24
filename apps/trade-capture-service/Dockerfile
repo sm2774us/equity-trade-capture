@@ -1,6 +1,6 @@
 # Multi-stage build: compile with Maven (cached layer via dependency
 # pre-fetch), then run on a minimal JRE for a small, fast-starting image.
-FROM eclipse-temurin:17-jdk-jammy AS build
+FROM maven:3.9-eclipse-temurin-17-alpine AS build
 WORKDIR /workspace
 COPY pom.xml ./root-pom.xml
 COPY libs/common-events/pom.xml libs/common-events/pom.xml
