@@ -13,7 +13,7 @@ java { toolchain { languageVersion.set(JavaLanguageVersion.of(17)) } }
 repositories { mavenCentral() }
 
 dependencies {
-    implementation("org.springframework.boot:spring-boot-starter")
+    implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-actuator")
     implementation("org.springframework.kafka:spring-kafka")
     implementation(project(":libs:common-events"))

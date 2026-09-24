@@ -31,7 +31,8 @@ import org.springframework.test.context.DynamicPropertySource;
 class AdapterSwitchIntegrationTest {
 
     @Container
-    static KafkaContainer kafka = new KafkaContainer(DockerImageName.parse("apache/kafka:3.7.1"));
+    static KafkaContainer kafka = new KafkaContainer(
+            DockerImageName.parse("apache/kafka:3.7.1").asCompatibleSubstituteFor("confluentinc/cp-kafka"));
 
     @Container
     static PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>("postgres:16-alpine")

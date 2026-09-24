@@ -18,6 +18,17 @@ updates:
     ignore:
       - dependency-name: "*"
         update-types: ["version-update:semver-major"]
+      # zone.js is pre-1.0 (0.x): by long-standing semver convention a
+      # "minor" version-slot change on a 0.x package is a breaking change
+      # (only the patch slot is safe to auto-bump), but Dependabot's
+      # update-types classify strictly by numeric position, so it labels
+      # 0.14.10 -> 0.16.3 as semver-minor, not semver-major — the majors-
+      # only rule above does not catch it. Angular core pins zone.js to an
+      # exact 0.x minor via peerDependencies, so any non-patch bump here
+      # breaks `npm ci` immediately. Ignore minors too, for this package
+      # specifically.
+      - dependency-name: "zone.js"
+        update-types: ["version-update:semver-major", "version-update:semver-minor"]
     groups:
       # Nx requires every @nx/* package (and the nx CLI itself) to stay on
       # the exact same version — a single-package bump (e.g. @nx/playwright
