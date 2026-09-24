@@ -33,9 +33,10 @@ describe('TradeBlotterComponent', () => {
     req.flush([]);
   });
 
-  it('updates the query key when the book filter changes', () => {
+  it('updates the query key when the book filter changes', async () => {
     fixture.detectChanges();
     httpMock.expectOne(`${environment.tradeCaptureApiUrl}/trades/book/SYSMACRO-EQ-01`).flush([]);
+    await fixture.whenStable();
 
     fixture.componentInstance.onBookIdChange('AUTOCALL-DESK-01');
     fixture.detectChanges();
@@ -49,6 +50,7 @@ describe('TradeBlotterComponent', () => {
         venue: 'OTC', sourceSystem: 'MUREX', status: 'ENRICHED', capturedAt: new Date().toISOString()
       }
     ]);
+    await fixture.whenStable();
     fixture.detectChanges();
     expect(fixture.componentInstance.trades().length).toBe(1);
   });

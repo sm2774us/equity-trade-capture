@@ -49,6 +49,9 @@ jobs:
           distribution: "temurin"
           cache: "maven"
 
+      - name: Pin Exact npm Version
+        run: npm install -g npm@10.9.7
+
       - name: Clean Install NPM Dependencies
         run: npm ci
 
@@ -117,6 +120,7 @@ jobs:
         with:
           node-version: "22"
           cache: "npm"
+      - run: npm install -g npm@10.9.7
       - run: npm ci
       - run: npx playwright install --with-deps chromium
       - run: npx nx e2e frontend

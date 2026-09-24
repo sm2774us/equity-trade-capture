@@ -6,6 +6,7 @@ build/
 .gradle/
 .nx/cache/
 .nx/workspace-data/
+.angular/
 *.log
 .DS_Store
 .env

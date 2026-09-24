@@ -25,13 +25,14 @@ describe('PositionsComponent', () => {
 
   afterEach(() => httpMock.verify());
 
-  it('sums realized P&L across positions', () => {
+  it('sums realized P&L across positions', async () => {
     fixture.detectChanges();
     const req = httpMock.expectOne(`${environment.pnlRiskApiUrl}/positions`);
     req.flush([
       { bookId: 'B1', instrumentId: 'AAPL', netQuantity: 10, avgCost: 100, realizedPnl: 50, lastUpdated: new Date().toISOString() },
       { bookId: 'B1', instrumentId: 'MSFT', netQuantity: -5, avgCost: 200, realizedPnl: -20, lastUpdated: new Date().toISOString() }
     ]);
+    await fixture.whenStable();
     fixture.detectChanges();
     expect(fixture.componentInstance.totalRealizedPnl()).toBe(30);
   });

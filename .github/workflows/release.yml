@@ -38,6 +38,9 @@ jobs:
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
 
+      - name: Pin Exact npm Version
+        run: npm install -g npm@10.9.7
+
       - name: Clean Install NPM Dependencies
         run: npm ci
 
